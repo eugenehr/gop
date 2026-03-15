@@ -1,0 +1,34 @@
+version: "2"
+linters:
+  default: standard
+  enable:
+    - asciicheck
+    - bodyclose
+    - canonicalheader
+    - dupl
+    - exptostd
+    - funlen
+    - gochecknoglobals
+    - goconst
+    - gocritic
+    - godoclint
+    - godot
+    - godox
+    - goheader
+    - gosec
+    - gosmopolitan
+    - iface
+    - ireturn
+    - loggercheck
+    - mnd
+    - modernize
+    - nilerr
+    - nilnesserr
+    - nilnil
+    - prealloc
+    - promlinter
+    - recvcheck
+    - sloglint
+    - sqlclosecheck
+    - whitespace
+
