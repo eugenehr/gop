@@ -26,7 +26,7 @@ type DotUpstream struct {
 // NewDotUpstream creates new DNS-over-TLS resolver upstream.
 //
 // NewDotUpstream создает DNS-over-TLS бэкенд для [dns.Resolver].
-func NewDotUpstream(address, sni string, insecureSkipVerify bool) *DotUpstream {
+func NewDotUpstream(address string, insecureSkipVerify bool) *DotUpstream {
 	host, port, _ := net.SplitHostPort(address)
 	if port == "" {
 		host = address
@@ -38,7 +38,7 @@ func NewDotUpstream(address, sni string, insecureSkipVerify bool) *DotUpstream {
 		},
 		Config: &tls.Config{
 			InsecureSkipVerify: insecureSkipVerify,
-			ServerName:         sni,
+			ServerName:         host,
 		},
 	}
 	return &DotUpstream{

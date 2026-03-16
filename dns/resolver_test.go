@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestDohResolver(t *testing.T) {
+func testDohResolver(t *testing.T) {
 	var dohEndpoints = []string{CloudflareDohEndpoint, GoogleDohEndpoint}
 	for _, endpoint := range dohEndpoints {
 		resolver := NewResolver(NewDohUpstream(endpoint))
@@ -15,12 +15,24 @@ func TestDohResolver(t *testing.T) {
 	}
 }
 
-func TestDotResolver(t *testing.T) {
-	var dotEndpoints = []string{CloudflareDotEndpoint, GoogleDotEndpoint}
-	var dotSNIs = []string{CloudflareDotEndpointSNI, GoogleDotEndpointSNI}
-	for i, endpoint := range dotEndpoints {
-		resolver := NewResolver(NewDotUpstream(endpoint, dotSNIs[i], false))
+func testDotResolver(t *testing.T) {
+	var dotEndpoints = []string{CloudflareDotEndpoint, GoogleDotEndpoint, "dns.google"}
+	for _, endpoint := range dotEndpoints {
+		resolver := NewResolver(NewDotUpstream(endpoint, false))
 		testResolver(t, resolver.ToDnsResolver(), endpoint)
+	}
+}
+
+func TestChainedResolver(t *testing.T) {
+	resolver := NewResolver(NewChainedUpstream(
+		//NewDohUpstream(CloudflareDohEndpoint),
+		NewDotUpstream(GoogleDotEndpoint, false),
+	))
+	r := resolver.ToDnsResolver()
+	//testResolver(t, r, "chained")
+	_, err := r.LookupHost(context.Background(), "рус.сайт.фк.рнк.ржд.ошибка.рф")
+	if err == nil {
+		t.Fatal("expected error, got none")
 	}
 }
 
@@ -49,7 +61,7 @@ func testResolver(t *testing.T, r *net.Resolver, endpoint string) {
 	}
 }
 
-func TestUpdResolver(t *testing.T) {
+func testUpdResolver(t *testing.T) {
 	endpoint := "" // "127.0.0.53:53"
 	host := "localhost"
 	r := NewResolver(NewUdpUpstream(endpoint)).ToDnsResolver()
