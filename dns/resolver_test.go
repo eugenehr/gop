@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func testDohResolver(t *testing.T) {
+func TestDohResolver(t *testing.T) {
 	var dohEndpoints = []string{CloudflareDohEndpoint, GoogleDohEndpoint}
 	for _, endpoint := range dohEndpoints {
 		resolver := NewResolver(NewDohUpstream(endpoint))
@@ -15,7 +15,7 @@ func testDohResolver(t *testing.T) {
 	}
 }
 
-func testDotResolver(t *testing.T) {
+func TestDotResolver(t *testing.T) {
 	var dotEndpoints = []string{CloudflareDotEndpoint, GoogleDotEndpoint, "dns.google"}
 	for _, endpoint := range dotEndpoints {
 		resolver := NewResolver(NewDotUpstream(endpoint, false))
@@ -61,7 +61,7 @@ func testResolver(t *testing.T, r *net.Resolver, endpoint string) {
 	}
 }
 
-func testUpdResolver(t *testing.T) {
+func TestUpdResolver(t *testing.T) {
 	endpoint := "" // "127.0.0.53:53"
 	host := "localhost"
 	r := NewResolver(NewUdpUpstream(endpoint)).ToDnsResolver()

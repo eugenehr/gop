@@ -18,21 +18,6 @@ type dnsResolver struct {
 	ptr      int
 }
 
-// ToDnsResolver creates [net.Resolver] from [dns.Resolver] for using with standard GO services.
-//
-// ToDnsResolver создает стандартный [net.Resolver] из [dns.Resolver] для использования его стандартными пакетами GO.
-func (r *Resolver) ToDnsResolver() *net.Resolver {
-	return &net.Resolver{
-		PreferGo: true,
-		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
-			return &dnsResolver{
-				ctx:      ctx,
-				resolver: r,
-			}, nil
-		},
-	}
-}
-
 func (r *dnsResolver) Write(b []byte) (int, error) {
 	resp, err := r.resolver.Resolve(r.ctx, b)
 	if err != nil {
